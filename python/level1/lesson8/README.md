@@ -28,47 +28,47 @@ range(n)返回n-1的整数序列，如range(5)生成的序列是从0开始小于
 * 三角形 
 
 ```
-import turtle as t
-t.shape('turtle')
+    import turtle as t
+    t.shape('turtle')
 
-for i in range(3):
-    t.fd(100)
-    t.lt(120)
+    for i in range(3):
+        t.fd(100)
+        t.lt(120)
 ```
 
 * 五角星
 
 ```
-import turtle as t
-t.shape('turtle')
+    import turtle as t
+    t.shape('turtle')
 
-for i in range(5):
-    t.fd(100)
-    t.rt(144)
+    for i in range(5):
+        t.fd(100)
+        t.rt(144)
 ```
 
 * 六边形
 
 ```
-import turtle as t
-t.shape('turtle')
+    import turtle as t
+    t.shape('turtle')
 
-for i in range(6):
-    t.fd(100)
-    t.rt(60)
+    for i in range(6):
+        t.fd(100)
+        t.rt(60)
 ```
 
 * 方形螺旋体
 
 ```
-import turtle as t
-t.shape('turtle')
-t.speed(10)
+    import turtle as t
+    t.shape('turtle')
+    t.speed(10)
 
-len = 1
-for i in range(200):
-    t.fd(len)
-    t.lt(90)
+    len = 1
+    for i in range(200):
+        t.fd(len)
+        t.lt(90)
 
-    len += 2
+        len += 2
 ```
