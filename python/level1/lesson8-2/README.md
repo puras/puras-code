@@ -9,9 +9,9 @@
 
 说明：
 
-start: 计数从start开始，默认是从0开始
-stop: 计数到stop结束，但不包括stop
-step: 步长，默认为1
+start: 计数从start开始，默认是从0开始  
+stop: 计数到stop结束，但不包括stop  
+step: 步长，默认为1  
 
 # 示例
 
