@@ -1,6 +1,6 @@
 import turtle as t
 
-t.speed(10)
+t.speed(0)
 
 for i in range(360):
     t.setheading(i) # 设置朝向

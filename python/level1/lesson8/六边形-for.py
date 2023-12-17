@@ -16,7 +16,10 @@ t.shape('turtle')
 # t.rt(60)
 
 for i in range(6):
-    t.fd(100)
+    for i in range(6):
+        t.fd(100)
+        t.rt(60)
+    #t.fd(100)
     t.rt(60)
 
 t.hideturtle()

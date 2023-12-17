@@ -1,17 +1,10 @@
 import turtle as t
 
-t.shape('turtle')
-
-# t.fd(100)
-# t.lt(120)
-# t.fd(100)
-# t.lt(120)
-# t.fd(100)
-# t.lt(120)
+turtle.shape('turtle')
 
 for i in range(3):
-    t.fd(100)
-    t.lt(120)
+    t.forward(100)
+    t.left(120)
 
 t.hideturtle()
 t.done()

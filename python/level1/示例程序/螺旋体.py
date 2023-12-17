@@ -1,11 +1,11 @@
 import turtle as t
 
 t.shape('turtle')
-t.speed(10)
+t.speed(0)
 
 x = 0
 
-for i in range(200):
+for i in range(500):
     t.fd(x)
     t.rt(12)
     x += 0.1

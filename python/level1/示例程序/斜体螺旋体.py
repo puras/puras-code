@@ -1,7 +1,7 @@
 import turtle as t
 
 t.shape('turtle')
-t.speed(10)
+t.speed(0)
 
 for i in range(200):
     t.fd(i * 2)
