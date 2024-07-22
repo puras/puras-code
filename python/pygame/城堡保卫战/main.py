@@ -27,14 +27,41 @@ screen = pg.display.set_mode((width, height))
 hero_img = pg.image.load('resources/images/dude.png')
 # 背景和风景
 grass_img = pg.image.load('resources/images/grass.png')
-# 加载箭头
 castle_img = pg.image.load('resources/images/castle.png')
+# 加载箭头
 arrow_img = pg.image.load('resources/images/bullet.png')
 # 加载獾
 badguy_img1 = pg.image.load('resources/images/badguy.png')
 badguy_img = badguy_img1
 
+# 加载城堡健康值图片
+healthbar_img = pg.image.load('resources/images/healthbar.png')
+health_img = pg.image.load('resources/images/health.png')
+
+# 加载胜利与失败 图片
+gameover_img = pg.image.load('resources/images/gameover.png')
+youwin_img = pg.image.load('resources/images/youwin.png')
+
+# 加载声音文件并配置音量
+hit = pg.mixer.Sound('resources/audio/explode.wav')
+enemy = pg.mixer.Sound('resources/audio/enemy.wav')
+shoot = pg.mixer.Sound('resources/audio/shoot.wav')
+hit.set_volume(0.05)
+enemy.set_volume(0.05)
+shoot.set_volume(0.05)
+
+# 加载游戏的背景音乐并让背景音乐一直不停的播放
+pg.mixer.music.load('resources/audio/moonlight.wav')
+pg.mixer.music.play(-1, 0.0)
+pg.mixer.music.set_volume(0.25)
+
+# 不停循环执行接下来的部分
+# running变量会跟踪游戏是否结束
+# exit_code变量会跟踪玩家是否胜利
 running = True
+exit_code = False
+
+accuracy = 0
 
 while running:
     # 在给屏幕画任何东西之前用黑色进行填充
@@ -54,9 +81,11 @@ while running:
     # 当英雄被旋转时，它的位置将会改变
     # 所以需要计算英雄的新位置，然后将其在屏幕上显示出来
     pos = pg.mouse.get_pos()
-    angle = math.atan2(pos[1] - (hero_pos[1] + 32), pos[0] - (hero_pos[0] + 26))
+    angle = math.atan2(pos[1] - (hero_pos[1] + 32),
+                       pos[0] - (hero_pos[0] + 26))
     hero_rot = pg.transform.rotate(hero_img, 360-angle*57.29)
-    hero_pos1 = (hero_pos[0] - hero_rot.get_rect().width / 2, hero_pos[1] - hero_rot.get_rect().height / 2)
+    hero_pos1 = (hero_pos[0] - hero_rot.get_rect().width / 2,
+                 hero_pos[1] - hero_rot.get_rect().height / 2)
     screen.blit(hero_rot, hero_pos1)
 
     # 在屏幕上画箭头
@@ -103,11 +132,41 @@ while running:
         bad_rect.top = bad_guy[1]
         bad_rect.left = bad_guy[0]
         if bad_rect.left < 64:
+            hit.play()
             health_val -= random.randint(5, 20)
             badguys.pop(index_badguy)
+
+        # 循环所有的坏蛋和所有的箭头来检查是否有碰撞
+        # 如果碰撞上，删除獾，删除箭头，并且精准度的变量里面加1
+        # 使用了PyGame内建功能来检查两个矩形是否交叉
+        index_arrow = 0
+        for bullet in arrows:
+            bullet_rect = pg.Rect(arrow_img.get_rect())
+            bullet_rect.left = bullet[1]
+            bullet_rect.top = bullet[2]
+            if bad_rect.colliderect(bullet_rect):
+                enemy.play()
+                acc[0] += 1
+                badguys.pop(index_badguy)
+                arrows.pop(index_arrow)
+            index_arrow += 1
         index_badguy += 1
     for bad_guy in badguys:
         screen.blit(badguy_img, bad_guy)
+
+    # 添加一个计时，使用PyGame默认的大小为24的字体来显示时间信息
+    font = pg.font.Font(None, 24)
+    survived_text = font.render(str((90000 - pg.time.get_ticks()) // 60000) + ':' + str((90000 - pg.time.get_ticks()) // 1000 % 60).zfill(2), True, (0, 0, 0))
+    text_rect = survived_text.get_rect()
+    text_rect.topright = [635, 5]
+    screen.blit(survived_text, text_rect)
+
+    # 画出城堡健康值
+    # 首先画一个全红色的生命值条
+    # 然后根据城堡的生命值往生命条里添加绿色
+    screen.blit(healthbar_img, (5, 5))
+    for health in range(health_val):
+        screen.blit(health_img, (health + 8, 8))
 
     # 更新屏幕
     pg.display.flip()
@@ -115,7 +174,8 @@ while running:
     # 检查事件，如果有退出命令，则终止程序的执行
     for event in pg.event.get():
         if event.type == pg.QUIT:
-            running = False
+            pg.quit()
+            exit()
         # 根据按下的键来更新按键记录数组
         elif event.type == pg.KEYDOWN:
             if event.key == pg.K_w:
@@ -140,9 +200,11 @@ while running:
         # 如果点击了就会得到鼠标的位置并根据玩家的和光标的位置计算出箭头旋转角度
         # 旋转角度的值存放在Arrows这个数组里
         if event.type == pg.MOUSEBUTTONDOWN:
+            shoot.play()
             pos = pg.mouse.get_pos()
             acc[1] += 1
-            arrows.append([math.atan2(pos[1] - (hero_pos1[1] + 32), pos[0] - (hero_pos1[0] + 26)),
+            arrows.append([math.atan2(pos[1] - (hero_pos1[1] + 32),
+                                      pos[0] - (hero_pos1[0] + 26)),
                            hero_pos1[0] + 32, hero_pos1[1] + 26])
 
     if keys[0]:
@@ -155,5 +217,48 @@ while running:
         hero_pos[0] += 5
     bad_timer -= 1
 
-pg.quit()
-exit()
+    # 下面是一些胜利/失败的基本条件
+    # 如果时间到了（90秒），停止运行游戏，设置游戏的输出
+    # 如果城堡被毁，停止运行游戏，设置游戏的输出
+    # 精确度是一直都需要计算的
+    # 第一个IF表达式是检查是否时间到了
+    # 第二个是检查城堡是否被摧毁了
+    # 第三个是计算你的精准度
+    # 之后，一个If表达式是检查你是赢了还是输出，然后显示相应的图片
+    if pg.time.get_ticks() >= 90000:
+        running = False
+        exit_code = True
+    if health_val <= 0:
+        running = False
+        exit_code = False
+    if acc[1] != 0:
+        accuracy = acc[0] * 1.0 / acc[1] * 100
+        accuracy = ("%.2f" % accuracy)
+    else:
+        accuracy = 0
+
+if not exit_code:
+    pg.font.init()
+    font = pg.font.Font(None, 24)
+    text = font.render("Accuracy:" + str(accuracy) + "%", True, (255, 0, 0))
+    text_rect = text.get_rect()
+    text_rect.centerx = screen.get_rect().centerx
+    text_rect.centery = screen.get_rect().centery + 24
+    screen.blit(gameover_img, (0, 0))
+    screen.blit(text, text_rect)
+else:
+    pg.font.init()
+    font = pg.font.Font(None, 24)
+    text = font.render("Accuracy:" + str(accuracy) + "%", True, (0, 255, 0))
+    text_rect = text.get_rect()
+    text_rect.centerx = screen.get_rect().centerx
+    text_rect.centery = screen.get_rect().centery + 24
+    screen.blit(youwin_img, (0, 0))
+    screen.blit(text, text_rect)
+
+while True:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
+            exit()
+    pg.display.flip()
