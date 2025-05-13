@@ -7,7 +7,8 @@ int main() {
     long long ans = 1;
     for (int i = 1; i <= 1992; i++) {
         ans = (ans * 1992) % 100;
+        cout << "*" << ans << endl;
     }
-    cout << ans % 100 << endl;
+    cout << ans << endl;
     return 0;
 }

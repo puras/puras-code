@@ -4,12 +4,12 @@
 #include<iostream>
 using namespace std;
 int main() {
-    float q, ai = 1, sum = 1;
     int n;
+    float q, a = 1, sum = 1;
     cin >> q >> n;
-    for (int i = 1; i <= n; i++) {
-        ai *= q;
-        sum += ai;
+    for (int i = 0; i < n; i++) {
+        a = a * q;
+        sum += a;
     }
     cout << sum;
     return 0;

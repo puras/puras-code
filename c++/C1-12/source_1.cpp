@@ -6,11 +6,12 @@
 using namespace std;
 
 int main() {
-    int cnt = 0;
-    float t;
+    float temp;
+    int cnt = 0; // 存满足条件的个数
+
     for (int i = 0; i < 10; i++) {
-        cin >> t;
-        if (t > 20) {
+        cin >> temp;
+        if (temp > 20) {
             cnt++;
         }
     }
