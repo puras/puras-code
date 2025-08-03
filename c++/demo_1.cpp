@@ -4,14 +4,12 @@
 #include<iostream>
 using namespace std;
 int main() {
-    int i;
-    for (i = 0; i < 100; i++) {
-        if (i < 90) {
-            continue;
-//break;
-        }
-        cout << i << "\n";
+    int arr[10] = {};
+    for (int i = 0; i < 10; i++) {
+        cin >> arr[i];
     }
-    cout << i;
+    for (int i = 9; i >=0; i--) {
+        cout << arr[i] << " ";
+    }
     return 0;
 }

@@ -4,28 +4,37 @@
 #include<iostream>
 using namespace std;
 int main() {
-    int n, tmp, c=0, sum=0;
+    int n;
     cin >> n;
-    tmp = n;
-    while (tmp != 0) {
+    int flag = 1;
+    int a = 0;
+    int tmp = n;
+    while (tmp > 0) {
         tmp /= 10;
-        c++;
+        a++;
     }
+
     tmp = n;
-    int a;
-    while (tmp != 0) {
-        a = tmp % 10;
-        int sa = 1;
-        for (int i = 0; i < c; i++) {
-            sa *= a;
+    int d;
+    int r = 0;
+    while (tmp > 0) {
+        d = tmp % 10;
+        tmp = tmp / 10;
+        int s = 1;
+        cout << "d=" << d << endl;
+        for (int i = 0; i < a; i++) {
+            s *= d;
         }
-        sum += sa;
-        tmp /= 10;
+        r = r + s;
+        cout << "s=" << s << endl;
     }
-    if (sum == n) {
-        cout << "Yes" << endl;
+    cout << "r=" << r << endl;
+
+    flag = r == n;
+    if (flag) {
+        cout << "yes";
     } else {
-        cout << "No" << endl;
+        cout << "no";
     }
 
     return 0;

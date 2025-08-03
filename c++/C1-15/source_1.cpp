@@ -4,12 +4,15 @@
 #include<iostream>
 using namespace std;
 int main() {
-    int sum = 0;
     char ch;
-    while (ch != '@') {
+    int sum = 0;
+    while (true) {
         cin >> ch;
+        if (ch == '@') {
+            break;
+        }
         if (ch >= '0' && ch <= '9') {
-            sum += ch - '0';
+            sum += (ch - '0');
         }
     }
     cout << sum;
